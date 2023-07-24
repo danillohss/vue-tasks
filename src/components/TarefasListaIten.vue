@@ -9,7 +9,11 @@
     >
       <i class="fa fa-check"></i>
     </button>
-    <button class="btn btn-primary btn-sm mr-1" title="Editar">
+    <button
+      class="btn btn-primary btn-sm mr-1"
+      title="Editar"
+      @click="$emit('editar', tarefa)"
+    >
       <i class="fa fa-pencil-alt"></i>
     </button>
     <button class="btn btn-danger btn-sm" title="Deletar">
@@ -23,7 +27,7 @@ export default {
   props: {
     tarefa: {
       type: Object,
-      requred: true,
+      required: true,
     },
   },
   computed: {

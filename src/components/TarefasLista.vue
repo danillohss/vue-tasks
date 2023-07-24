@@ -20,12 +20,18 @@
         v-for="tarefa in tarefas"
         :key="tarefa.id"
         :tarefa="tarefa"
+        @editar="selecionarTarefaEditar"
       />
     </ul>
 
     <p v-else>Nenhuma tarefa criada.</p>
 
-    <TarefaSalvar v-if="this.exibirFormulario" @salvar="criarTarefa" />
+    <TarefaSalvar
+      v-if="this.exibirFormulario"
+      @salvar="criarTarefa"
+      :tarefa="tarefaSelecionada"
+      @editar="editarTarefa"
+    />
   </div>
 </template>
 
@@ -43,6 +49,7 @@ export default {
     return {
       tarefas: [],
       exibirFormulario: false,
+      tarefaSelecionada: null,
     };
   },
   methods: {
@@ -54,10 +61,27 @@ export default {
     //MÉTODO POST
     async criarTarefa(tarefa) {
       await api.post(`/tarefas`, tarefa).then((response) => {
-        console.log(tarefa)
         this.tarefas.push(response.data);
         this.exibirFormulario = false;
+        this.resetar();
       });
+    },
+    selecionarTarefaEditar(tarefa) {
+      this.tarefaSelecionada = tarefa;
+      this.exibirFormulario = true;
+    },
+    //MÉTODO PUT
+    async editarTarefa(tarefa) {
+      await api.put(`/tarefas/${tarefa.id}`, tarefa).then(() => {
+        const indice = this.tarefas.findIndex((t) => t.id === tarefa.id);
+        this.tarefas.splice(indice, 1, tarefa);
+        console.log('teste')
+        this.resetar();
+      });
+    },
+    resetar() {
+      this.exibirFormulario = false;
+      this.tarefaSelecionada = null;
     },
   },
   created() {
