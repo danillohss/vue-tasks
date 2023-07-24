@@ -21,6 +21,7 @@
         :key="tarefa.id"
         :tarefa="tarefa"
         @editar="selecionarTarefaEditar"
+        @deletar="deletarTarefa"
       />
     </ul>
 
@@ -75,9 +76,20 @@ export default {
       await api.put(`/tarefas/${tarefa.id}`, tarefa).then(() => {
         const indice = this.tarefas.findIndex((t) => t.id === tarefa.id);
         this.tarefas.splice(indice, 1, tarefa);
-        console.log('teste')
         this.resetar();
       });
+    },
+    //MÉTODO DELETE
+    async deletarTarefa(tarefa) {
+      const confirmar = window.confirm(
+        `Deseja realmente deletar a tarefa ${tarefa.titulo} ?`
+      );
+      if (confirmar) {
+        api.delete(`/tarefas/${tarefa.id}`).then(() => {
+          const indice = this.tarefas.findIndex((t) => t.id === tarefa.id);
+          this.tarefas.splice(indice, 1);
+        });
+      }
     },
     resetar() {
       this.exibirFormulario = false;
