@@ -1,4 +1,4 @@
-# vue-http
+# vue-http - Esse é um projeto de tarefas onde estou usando ele como base para estudo e revisão dos métodos HTTP (GET, POST, PUT e DELETE) por meio do Json server, uma api fake local
 
 ## Project setup
 ```
