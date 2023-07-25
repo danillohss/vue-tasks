@@ -5,10 +5,7 @@
         <h1 class="font-weight-light">Lista de Tarefas</h1>
       </div>
       <div class="col-sm-2">
-        <button
-          class="btn btn-primary float-right"
-          @click="exibirFormulario = !exibirFormulario"
-        >
+        <button class="btn btn-primary float-right" @click="formCriarTarefa()">
           <i class="fa fa-plus mr-2"></i>
           <span>Criar</span>
         </button>
@@ -22,6 +19,7 @@
         :tarefa="tarefa"
         @editar="selecionarTarefaEditar"
         @deletar="deletarTarefa"
+        @concluir="editarTarefa"
       />
     </ul>
 
@@ -90,6 +88,14 @@ export default {
           this.tarefas.splice(indice, 1);
         });
       }
+    },
+    formCriarTarefa() {
+      if (this.tarefaSelecionada) {
+        this.tarefaSelecionada = null;
+        return;
+      }
+
+      this.exibirFormulario = !this.exibirFormulario;
     },
     resetar() {
       this.exibirFormulario = false;
