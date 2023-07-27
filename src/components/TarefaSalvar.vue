@@ -31,6 +31,9 @@
       </div>
 
       <button type="submit" class="btn btn-primary">Salvar</button>
+      <button type="button" class="btn btn-secondary" style="margin: 0 15px;" @click="cancelar">
+        Cancelar
+      </button>
     </form>
   </div>
 </template>
@@ -69,9 +72,12 @@ export default {
   },
   methods: {
     salvar() {
-      const operacao = !this.tarefa ? "criar" : "editar";
+      const operacao = !this.tarefa ? "salvar" : "editar";
       this.$emit(operacao, this.tarefaLocal);
       this.tarefaLocal = { titulo: "", concluido: false };
+    },
+    cancelar() {
+      this.$emit("cancelar");
     },
   },
 };

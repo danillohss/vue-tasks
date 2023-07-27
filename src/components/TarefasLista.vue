@@ -14,7 +14,7 @@
 
     <ul class="list-group" v-if="tarefas.length > 0">
       <TarefasListaIten
-        v-for="tarefa in tarefas"
+        v-for="tarefa in tarefasOrdenadas"
         :key="tarefa.id"
         :tarefa="tarefa"
         @editar="selecionarTarefaEditar"
@@ -30,6 +30,7 @@
       @salvar="criarTarefa"
       :tarefa="tarefaSelecionada"
       @editar="editarTarefa"
+      @cancelar="exibirFormulario = false"
     />
   </div>
 </template>
@@ -50,6 +51,15 @@ export default {
       exibirFormulario: false,
       tarefaSelecionada: null,
     };
+  },
+  computed: {
+    tarefasOrdenadas() {
+      return this.tarefas
+        .slice()
+        .sort((a, b) =>
+          a.concluido === b.concluido ? 0 : a.concluido ? 1 : -1
+        );
+    },
   },
   methods: {
     async getTarefas() {
