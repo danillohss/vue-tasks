@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <ul class="list-group" v-if="tarefas.length > 0">
+    <ul class="list-group" v-if="tarefasOrdenadas.length > 0">
       <TarefasListaIten
         v-for="tarefa in tarefasOrdenadas"
         :key="tarefa.id"
@@ -23,7 +23,9 @@
       />
     </ul>
 
-    <p v-else>Nenhuma tarefa criada.</p>
+    <p v-else-if="msgErro">Nenhuma tarefa criada.</p>
+
+    <div class="alert alert-danger" v-if="msgErro">{{ msgErro }}</div>
 
     <TarefaSalvar
       v-if="this.exibirFormulario"
@@ -50,6 +52,7 @@ export default {
       tarefas: [],
       exibirFormulario: false,
       tarefaSelecionada: null,
+      msgErro: false,
     };
   },
   computed: {
@@ -63,9 +66,16 @@ export default {
   },
   methods: {
     async getTarefas() {
-      await api.get("/tarefas").then((response) => {
-        this.tarefas = response.data;
-      });
+      await api
+        .get("/tarefas")
+        .then((response) => {
+          this.tarefas = response.data;
+        })
+        .catch((error) => {
+          if (error.response) {
+            this.msgErro = `O Servidor retornou um erro: ${error.message} ${error.response.statusText}`;
+          }
+        });
     },
     //MÉTODO POST
     async criarTarefa(tarefa) {
